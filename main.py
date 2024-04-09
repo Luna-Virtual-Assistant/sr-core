@@ -1,7 +1,6 @@
-import speech_recognition as sr
 from mqtt_connection.start import start
-
-
+from app.core import CommandRecognizer
 
 if __name__ == "__main__":
-    start()
+    recognizer = CommandRecognizer()
+    recognizer.recognize_command()
