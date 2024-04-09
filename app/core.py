@@ -1,4 +1,9 @@
+import logging
 import speech_recognition as sr
+import sounddevice
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(message)s')
 
 class SpeechRecognizer:
     def __init__(self):
@@ -23,7 +28,7 @@ class SpeechAdapter:
 class TextProcessor:
     def process_text(self, text):
         text = text.lower()
-        print("You said: " + text)
+        logging.info("Proccessed command: %s", text)
         return "luna" in text
 
 class CommandRecognizer:
@@ -33,13 +38,12 @@ class CommandRecognizer:
         self.__text_processor = TextProcessor()
 
     def recognize_command(self):
-        print("Luna is listening...")
         while True:
             try:
                 audio = self.__speech_recognizer.get_audio()
                 command = self.__speech_recognizer_api_adapter.recognize(audio)
                 self.__text_processor.process_text(command)
             except sr.RequestError as e:
-                print("Could not request results; {0}".format(e))
+                logging.error("Could not request results; %s", e)
             except sr.UnknownValueError:
-                print("unknown error occurred")
+                logging.error("Unknown error occurred")
